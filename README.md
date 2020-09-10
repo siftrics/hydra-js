@@ -5,7 +5,7 @@ This repository contains the official [Hydra API](https://siftrics.com/) Node.js
 1. Install the node module.
 
 ```
-npm install hydra-api
+npm install siftrics-hydra-api
 ```
 
 
@@ -15,7 +15,7 @@ npm install hydra-api
 4. Use the client to processes documents, passing in the id of a data source and the filepaths of the documents.
 
 ```
-const hydra = require('hydra-api');
+const hydra = require('siftrics-hydra-api');
 
 const h = new hydra.Client('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
