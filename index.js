@@ -70,9 +70,14 @@ class Client {
         });
     }
 
-    recognize(dataSourceId, files, doFaster=false) {
+    recognize(dataSourceId, files, config = {
+        doFaster: false,
+        returnTransformedImages: false,
+        returnJpgs: false,
+        jpgQuality: 85
+    }) {
         return new Promise((resolve, reject) => {
-            let payload = { files: [], doFaster }
+            let payload = Object.assign({ files: [] }, config)
             for (let k in files) {
                 const file = files[k];
                 let mimeType = '';

@@ -47,8 +47,56 @@ h.recognize('my-data-source-id', ['invoice_1.pdf', 'my_receipt.png'])
 
 ## Faster Results
 
-`client.recognize('my-data-source-id', [ ... ], doFaster=False)` has a default parameter, `doFaster`, which defaults to `false`, but if it's set to `true` then Siftrics processes the documents faster at the risk of lower text recognition accuracy. Experimentally, doFaster=true seems not to affect accuracy when all the documents to be processed have been rotated no more than 45 degrees.
+The `recognize` function has a default parameter, `config`, which allows users to set various flags:
 
+```
+recognize(dataSourceId, files, config = {
+    doFaster: false,
+    returnTransformedImages: false,
+    returnJpgs: false,
+    jpgQuality: 85
+})
+```
+
+If `doFaster` is set to `true`, then Siftrics processes the documents in half the time at the risk of lower text recognition accuracy. Experimentally, setting `doFaster` to `true` seems not to affect accuracy when all the documents to be processed have been rotated no more than 45 degrees.
+
+## Return Transformed / Pre-Processed Images
+
+Hydra can transform input documents so they are cropped and aligned with the original image used to create the data source.
+
+To enable this feature, set `returnTransformedImages` to `true` in `config` (see the "Faster Results" section above for an example of using `config`).
+
+Returned images will be available in the "TransformedImages" field of each element of "Rows" in the response:
+
+```
+{
+  "Rows": [
+    {
+      "Error": "",
+      "FileIndex": 0,
+      "RecognizedText": {
+        "My Field 1": "text from your document...",
+        "My Field 2": "text from your document...",
+        ...
+      },
+      "TransformedImages": [
+        {
+          "Base64Image": ...,
+          "PageNumber": 1
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+}
+```
+
+## Export JPEGs instead of PNGs
+
+If your data source returns cropped images, they are returned as PNGs encoded as base-64 strings. It is possible to return these images as JPEGs instead of PNGs, by setting `returnJpgs` to `true` in `config` (see the "Faster Results" section above for an example of using `config`). Additionally, there is a flag `jpgQuality` which is a number between `1` and `100` inclusive, which determines the quality of the encoded JPEGs. The default is `85`. The higher the number, the higher the quality.
+
+Returning JPEGs instead of PNGs with `jpgQuality=85` typically exhibits a 7-10x reduction in image size, with minimal reduction in quality.
 
 ## Official API Documentation
 
